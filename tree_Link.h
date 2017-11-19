@@ -1,6 +1,8 @@
 #pragma once
 #include "tree_Node.h"
 
+#include <memory>
+
 namespace tree
 {
 	class Link : public Node
@@ -19,7 +21,8 @@ namespace tree
 
 		const std::string & Path() const { return _path; }
 
-		static Link * Parse(rapidjson::Value & json);
+		//static Link * Parse(rapidjson::Value & json);
+		static std::unique_ptr<Link> Parse(rapidjson::Value & json);
 
 	private:
 		Node * _link { nullptr };

@@ -4,6 +4,7 @@
 #include <sstream>
 #include <regex>
 #include <iomanip>
+#include <memory>
 
 #ifdef _DEBUG
 #define new DBG_NEW

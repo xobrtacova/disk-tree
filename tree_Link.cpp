@@ -1,6 +1,8 @@
 #include "headers.h"
 #include "tree_Link.h"
 
+#include <memory>
+
 #ifdef _DEBUG
 #define new DBG_NEW
 #endif
@@ -26,10 +28,11 @@ void Link::List(bool bFollow, bool bRecursive, const std::string & offset, std::
 	}
 }
 
-Link * Link::Parse(rapidjson::Value & json)
+//Link * Link::Parse(rapidjson::Value & json)
+std::unique_ptr<Link> Link::Parse(rapidjson::Value & json)
 {
 	if (!json.HasMember("name") || !json.HasMember("link"))
 		return nullptr;
 
-	return new Link(json["name"].GetString(), json["link"].GetString());
+	return std::unique_ptr<Link> {new Link(json["name"].GetString(), json["link"].GetString())};
 }
