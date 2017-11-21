@@ -10,10 +10,11 @@
 #define new DBG_NEW
 #endif
 
+//std::unique_ptr<tree::Folder> tree::ParseDisk(rapidjson::Value & json)
 tree::Folder * tree::ParseDisk(rapidjson::Value & json)
 {
 	// parse disk hierarchy
-	Folder * root = dynamic_cast<std::unique_ptr<Folder>>(Folder::Parse(json));
+	Folder * root = dynamic_cast<Folder*>(Folder::Parse(json));
 	if (!root)
 		return nullptr;
 

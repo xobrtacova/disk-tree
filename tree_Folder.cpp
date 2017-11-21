@@ -50,9 +50,9 @@ void Folder::List(bool bFollow, bool bRecursive, const std::string & offset, std
 	}
 }
 
-void Folder::Insert(Node * node)
+void Folder::Insert(std::unique_ptr<Node> && ptr)
 {
-	_content.push_back(node);
+	_content.push_back(std::move(ptr));
 }
 
 Node * Folder::Find(const std::string & path) const
@@ -95,16 +95,13 @@ void Folder::Remove(const Node * node)
 //Folder * Folder::Parse(rapidjson::Value & json)
 std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 {
-	//Folder * folder = nullptr;
-	std::unique_ptr<Folder> folder(nullptr);
+	Folder * folder = nullptr;
 
 	rapidjson::Value * content = nullptr;
 	if (json.IsArray())
 	{	// root
 		content = &json;
-		//folder = new Folder("");
-		folder.reset();
-		std::unique_ptr<Folder> folder(new Folder(""));
+		folder = new Folder("");
 	}
 	else
 	{
@@ -112,9 +109,7 @@ std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 			return nullptr;
 
 		content = &(json["content"]);
-		//folder = new Folder(json["name"].GetString());
-		folder.reset();
-		std::unique_ptr<Folder> folder(new Folder(json["name"].GetString()));
+		folder = new Folder(json["name"].GetString());
 	}
 
 	for (auto & elm : content->GetArray())
@@ -123,8 +118,8 @@ std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 		if (!pNode)
 			return nullptr;
 
-		folder->Insert(pNode.get());
+		folder->Insert(pNode);
 	}
 
-	return folder;
+	return std::unique_ptr<Folder> {new Folder(*folder)};
 }

@@ -35,4 +35,5 @@ std::unique_ptr<Link> Link::Parse(rapidjson::Value & json)
 		return nullptr;
 
 	return std::unique_ptr<Link> {new Link(json["name"].GetString(), json["link"].GetString())};
+	//return new Link(json["name"].GetString(), json["link"].GetString());
 }
