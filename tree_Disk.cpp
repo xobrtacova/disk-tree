@@ -28,7 +28,6 @@ std::unique_ptr<tree::Folder> tree::ParseDisk(rapidjson::Value & json)
 	{
 		Folder * folder = folders.top();
 		folders.pop();
-		
  		for (auto node : folder->Content())
 		{
 			if (auto * subfolder = dynamic_cast<Folder*>(node.get()))
