@@ -17,14 +17,14 @@ namespace tree
 		tree::Size Size(bool bFollow, bool bRecursive) const override;
 		void List(bool bFollow, bool bRecursive, const std::string & offset, std::ostream & out) const override;
 
-		//void Insert(Node * node);
 		void Insert(std::unique_ptr<Node> && ptr);
-		void Remove(const Node * node);
-		//const std::vector<Node*> & Content() const { return _content; }
+		void Remove(const std::unique_ptr<Node> node);
 		const std::vector<std::unique_ptr<Node>> & Content() const { return _content; }
 
-		Node * Find(const std::string & path) const;
-		Node * Find(std::sregex_token_iterator iter) const;
+		//Node * Find(const std::string & path) const;
+		//Node * Find(std::sregex_token_iterator iter) const;
+		std::unique_ptr<Node> Find(const std::string & path) const;
+		std::unique_ptr<Node> Find(std::sregex_token_iterator iter) const;
 
 		//static Folder * Parse(rapidjson::Value & json);
 		static std::unique_ptr<Folder> Parse(rapidjson::Value & json);

@@ -37,7 +37,7 @@ void Folder::List(bool bFollow, bool bRecursive, const std::string & offset, std
 	out << "[" << Name() << "]" << std::endl;
 	for (auto node : _content)
 	{
-		auto * folder = dynamic_cast<const Folder*>(node);
+		auto * folder = dynamic_cast<const Folder*>(node.get());
 		if (!bRecursive && folder)
 		{
 			out << offset << "    " << "[" << folder->Name() << "]" << std::endl;
@@ -52,10 +52,11 @@ void Folder::List(bool bFollow, bool bRecursive, const std::string & offset, std
 
 void Folder::Insert(std::unique_ptr<Node> && ptr)
 {
-	_content.push_back(std::move(ptr));
+	//_content.push_back(std::move(ptr));
+	_content.push_back(ptr);
 }
 
-Node * Folder::Find(const std::string & path) const
+std::unique_ptr<Node> Folder::Find(const std::string & path) const
 {
 	std::regex rgx { "/" };
 	auto start = path.begin();
@@ -65,12 +66,12 @@ Node * Folder::Find(const std::string & path) const
 	return Find({ start, path.end(), rgx, -1 });
 }
 
-Node * Folder::Find(std::sregex_token_iterator iter) const
+std::unique_ptr<Node> Folder::Find(std::sregex_token_iterator iter) const
 {
 	if (iter == std::sregex_token_iterator())
 		return nullptr;
 
-	auto itNode = std::find_if(_content.begin(), _content.end(), [&iter](Node * node)
+	auto itNode = std::find_if(_content.begin(), _content.end(), [&iter](std::unique_ptr<Node> node)
 	{
 		return node->Name() == *iter;
 	}
@@ -82,12 +83,12 @@ Node * Folder::Find(std::sregex_token_iterator iter) const
 	if (++iter == std::sregex_token_iterator())
 		return *itNode;
 
-	auto * folder = dynamic_cast<Folder*>(*itNode);
+	auto * folder = dynamic_cast<Folder*>((*itNode).get());
 
 	return folder ? folder->Find(iter) : nullptr;
 }
 
-void Folder::Remove(const Node * node)
+void Folder::Remove(const std::unique_ptr<Node> node)
 {
 	_content.erase(std::remove(_content.begin(), _content.end(), node), _content.end());
 }
@@ -115,10 +116,11 @@ std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 	for (auto & elm : content->GetArray())
 	{
 		auto pNode = Node::Parse(elm);
+		
 		if (!pNode)
 			return nullptr;
 
-		folder->Insert(pNode);
+		folder->Insert(std::move(pNode));
 	}
 
 	return std::unique_ptr<Folder> {new Folder(*folder)};
