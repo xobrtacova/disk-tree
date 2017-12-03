@@ -4,6 +4,7 @@
 
 #include "../tree_Folder.h"
 #include "../tree_Disk.h"
+#include "../tree_File.h"
 
 #include <memory>
 #include <sstream>
@@ -181,9 +182,10 @@ TEST(Folder, Operations)
 	auto node = ptr->Find("/file-X");
 	EXPECT_NE(node, nullptr);
 
-	ptr->Remove(std::move(node));
+	ptr->Remove(node);
 	EXPECT_EQ(ptr->Find("/file-X"), nullptr);
 
-	ptr->Insert(std::move(node));
+	EXPECT_TRUE((rapidjson::ParseResult)json.Parse(R"({ "name": "file-X", "size": "4B" })"));
+	ptr->Insert(tree::File::Parse(json));
 	EXPECT_NE(ptr->Find("/file-X"), nullptr);
 }
