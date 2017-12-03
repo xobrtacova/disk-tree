@@ -4,14 +4,11 @@
 #include "tree_Folder.h"
 #include "tree_Link.h"
 
-#include <memory>
-
 #ifdef _DEBUG
 #define new DBG_NEW
 #endif
 
 using namespace tree;
-
 
 std::unique_ptr<Node> Node::Parse(rapidjson::Value & json)
 {

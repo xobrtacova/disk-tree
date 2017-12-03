@@ -2,7 +2,6 @@
 #include "tree_Folder.h"
 
 #include <numeric>
-#include <memory>
 
 #ifdef _DEBUG
 #define new DBG_NEW
@@ -16,19 +15,19 @@ tree::Size Folder::Size(bool bFollow, bool bRecursive) const
 		_content.begin(),
 		_content.end(),
 		.0,
-		[bFollow, bRecursive](tree::Size size, const Node * node)
-		{
-			auto * folder = dynamic_cast<const Folder*>(node);
+		[bFollow, bRecursive](tree::Size size, auto & node)
+	{
+		auto * folder = dynamic_cast<const Folder*>(node.get());
 
-			if (folder)
-			{
-				return size + (bRecursive ? folder->Size(bFollow, bRecursive) : 0.);
-			}
-			else
-			{
-				return size + node->Size(bFollow, bRecursive);
-			}
+		if (folder)
+		{
+			return size + (bRecursive ? folder->Size(bFollow, bRecursive) : 0.);
 		}
+		else
+		{
+			return size + node->Size(bFollow, bRecursive);
+		}
+	}
 	);
 }
 
@@ -50,14 +49,14 @@ void Folder::List(bool bFollow, bool bRecursive, const std::string & offset, std
 	}
 }
 
-void Folder::Insert(std::unique_ptr<Node> && ptr)
+void Folder::Insert(std::unique_ptr<Node> && node)
 {
-	_content.push_back(std::move(ptr));
+	_content.push_back(std::move(node));
 }
 
 Node * Folder::Find(const std::string & path) const
 {
-	std::regex rgx { "/" };
+	std::regex rgx{ "/" };
 	auto start = path.begin();
 	if (*start == '/')
 		++start;
@@ -70,7 +69,7 @@ Node * Folder::Find(std::sregex_token_iterator iter) const
 	if (iter == std::sregex_token_iterator())
 		return nullptr;
 
-	auto itNode = std::find_if(_content.begin(), _content.end(), [&iter](std::unique_ptr<Node> node)
+	auto itNode = std::find_if(_content.begin(), _content.end(), [&iter](auto & node)
 	{
 		return node->Name() == *iter;
 	}
@@ -89,14 +88,12 @@ Node * Folder::Find(std::sregex_token_iterator iter) const
 
 void Folder::Remove(const Node * node)
 {
-	_content.erase(std::remove(_content.begin(), _content.end(), [node](auto & ptr) { return ptr.get() == node; }), _content.end());
+	_content.erase(std::remove_if(_content.begin(), _content.end(), [node](auto & ptr) { return ptr.get() == node; }), _content.end());
 }
-
 
 std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 {
 	Folder * folder = nullptr;
-
 	rapidjson::Value * content = nullptr;
 	if (json.IsArray())
 	{	// root
@@ -115,7 +112,6 @@ std::unique_ptr<Folder> Folder::Parse(rapidjson::Value & json)
 	for (auto & elm : content->GetArray())
 	{
 		auto pNode = Node::Parse(elm);
-		
 		if (!pNode)
 			return nullptr;
 

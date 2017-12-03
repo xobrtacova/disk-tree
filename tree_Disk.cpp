@@ -4,7 +4,6 @@
 #include "tree_Link.h"
 
 #include <stack>
-#include <memory>
 
 #ifdef _DEBUG
 #define new DBG_NEW
@@ -13,9 +12,7 @@
 std::unique_ptr<tree::Folder> tree::ParseDisk(rapidjson::Value & json)
 {
 	// parse disk hierarchy
-	//Folder * root = dynamic_cast<Folder*>(Folder::Parse(json));
 	auto root = Folder::Parse(json);
-
 	if (!root)
 		return nullptr;
 
@@ -28,7 +25,8 @@ std::unique_ptr<tree::Folder> tree::ParseDisk(rapidjson::Value & json)
 	{
 		Folder * folder = folders.top();
 		folders.pop();
- 		for (auto & node : folder->Content())
+
+		for (auto & node : folder->Content())
 		{
 			if (auto * subfolder = dynamic_cast<Folder*>(node.get()))
 			{
