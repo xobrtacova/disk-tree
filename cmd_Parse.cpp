@@ -13,7 +13,7 @@ using namespace tree;
 
 std::optional<std::pair<Command, Options>> cmd::ParseOptions(const std::string & line)
 {
-	std::regex rgx { "^(help|list|size|quit)(\\s-(recursive|follow)(\\s-(recursive|follow)){0,1}){0,1}(\\s+/(.+)){0,1}$" };
+	std::regex rgx { "^(help|list|size|quit|rm|mkdir|link|touch)(\\s-(recursive|follow)(\\s-(recursive|follow)){0,1}){0,1}(\\s+(.+)){0,1}$" };
 	std::smatch match;
 	if (!std::regex_match(line, match, rgx))
 		return {};
@@ -21,18 +21,61 @@ std::optional<std::pair<Command, Options>> cmd::ParseOptions(const std::string &
 	bool bFollow = match[3] == "follow" || match[5] == "follow";
 	bool bRecursive = match[3] == "recursive" || match[5] == "recursive";
 
-	std::string path = match[7].matched ? match[7].str() : "/";
-
+	std::string path;
 	Command command;
 
 	if (match[1] == "help")
+	{
 		command = Command::Help;
+		if (match[7].matched)
+		{
+			if (match[7].str()[0] == '/' || match[7].str()[0] == '-')
+				return {};
+
+			path = match[7].str();
+		}
+
+	}
 	else if (match[1] == "list")
+	{
 		command = Command::List;
+
+		if (match[7].matched)
+		{
+			if (match[7].str()[0] != '/')
+				return {};
+
+			path = match[7].str();
+		}
+
+		else 
+		{
+			path = '/';
+		}
+	}
 	else if (match[1] == "size")
+	{
 		command = Command::Size;
+
+		if (match[7].matched)
+		{
+			if (match[7].str()[0] != '/')
+				return {};
+
+			path = match[7].str();
+		}
+
+		else
+		{
+			path = '/';
+		}
+	}
 	else if (match[1] == "quit")
+	{
 		command = Command::Quit;
+		if (match[7].matched)
+			return {};
+	}
 	else
 		return {};
 
