@@ -17,4 +17,5 @@ namespace cmd
 
 	Handler Size(const Options & options);
 	Handler List(const Options & options);
+	Handler Remove(const Options & options);
 }
