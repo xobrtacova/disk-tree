@@ -11,11 +11,13 @@ namespace tree
 
 namespace cmd
 {
-	//bool Help(tree::Node *, std::ostream & out);
 	Handler Help(const Options & options);
 	bool Quit(tree::Node *, std::ostream & out);
 
 	Handler Size(const Options & options);
 	Handler List(const Options & options);
 	Handler Remove(const Options & options);
+	Handler MkDir(const Options & options);
+	Handler Link(const Options & options);
+	Handler Touch(const Options & options);
 }

@@ -157,10 +157,14 @@
   <ItemGroup>
     <ClCompile Include="..\cmd_Handler.cpp" />
     <ClCompile Include="..\cmd_Help.cpp" />
+    <ClCompile Include="..\cmd_Link.cpp" />
     <ClCompile Include="..\cmd_List.cpp" />
+    <ClCompile Include="..\cmd_MkDir.cpp" />
     <ClCompile Include="..\cmd_Parse.cpp" />
     <ClCompile Include="..\cmd_Quit.cpp" />
+    <ClCompile Include="..\cmd_Remove.cpp" />
     <ClCompile Include="..\cmd_Size.cpp" />
+    <ClCompile Include="..\cmd_Touch.cpp" />
     <ClCompile Include="..\tree_Disk.cpp" />
     <ClCompile Include="..\tree_File.cpp" />
     <ClCompile Include="..\tree_Folder.cpp" />
@@ -174,10 +178,13 @@
     <ClCompile Include="test_Help.cpp" />
     <ClCompile Include="test_Link.cpp" />
     <ClCompile Include="test_List.cpp" />
+    <ClCompile Include="test_MkDir.cpp" />
     <ClCompile Include="test_Node.cpp" />
     <ClCompile Include="test_Quit.cpp" />
+    <ClCompile Include="test_Remove.cpp" />
     <ClCompile Include="test_Size.cpp" />
     <ClCompile Include="test_Size_object.cpp" />
+    <ClCompile Include="test_Touch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\gtest\gtest.vcxproj">
