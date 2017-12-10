@@ -3,6 +3,7 @@
 #include "cmd_Parse.h"
 #include "tree_Node.h"
 #include <iostream>
+#include <fstream>
 //#include <unistd.h>
 
 #ifdef _DEBUG
@@ -16,7 +17,7 @@ Handler cmd::Link(const Options & options)
 {
 	return[name = options.name, path = options.path](Node * node, std::ostream & out)
 	{
-		//link("C://Users//Tatiana//Desktop//ar", "ar");
+		//link(path, name);
 		return true;
 	};
 }

@@ -6,9 +6,8 @@
 
 TEST(Touch, Command)
 {
-	auto command = cmd::GetHandler("touch");
+	auto command = cmd::GetHandler("touch ijfsg 4");
 	EXPECT_NE(command, nullptr);
-
 
 	std::stringstream str;
 

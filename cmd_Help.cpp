@@ -15,7 +15,7 @@ Handler cmd::Help(const Options & options)
 {
 	//todo: print command help
 
-	return[command = options.path](Node * node, std::ostream & out) // node hlavny adresar, out vyparsovali sme
+	return[command = options.path](Node * node, std::ostream & out)
 	{
 		if (command == "")
 			out << "Prikazy:\nquit\nlist [-follow] [-recursive] [path]\nsize [-follow] [-recursive] [path]\ntree [path]\ndump [path]\nrm <path>\nmkdir <path>\nlink <path> <name>\ntouch <path> [size]" << std::endl;
@@ -37,7 +37,7 @@ Handler cmd::Help(const Options & options)
 			out << "Vytvorenie odkazu" << std::endl;
 		else if (command == "touch")
 			out << "Vytvorenie suboru (default velkost je 0B)." << std::endl;
-		else
+		else 
 			out << "Prikaz nie je v ponuke!" << std::endl;
 
 		return true;

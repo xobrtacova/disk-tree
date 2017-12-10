@@ -6,12 +6,10 @@
 
 TEST(Remove, Command)
 {
-	auto command = cmd::GetHandler("rm");
+	auto command = cmd::GetHandler("rm hvzgzu");
 	EXPECT_NE(command, nullptr);
-
 
 	std::stringstream str;
 
 	EXPECT_TRUE(command(nullptr, str));
-	//EXPECT_FALSE(str.str().empty());
 }
