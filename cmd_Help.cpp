@@ -18,7 +18,7 @@ Handler cmd::Help(const Options & options)
 	return[command = options.path](Node * node, std::ostream & out) // node hlavny adresar, out vyparsovali sme
 	{
 		if (command == "")
-			out << "Prikazy:\nquit\nlist\nsize\ntree\ndump\nrm\nmkdir\nlink\ntouch" << std::endl;
+			out << "Prikazy:\nquit\nlist [-follow] [-recursive] [path]\nsize [-follow] [-recursive] [path]\ntree [path]\ndump [path]\nrm <path>\nmkdir <path>\nlink <path> <name>\ntouch <path> [size]" << std::endl;
 		else if (command == "quit")
 			out << "Ukoncenie prace s aplikaciou." << std::endl;
 		else if (command == "list")

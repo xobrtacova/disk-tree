@@ -18,9 +18,9 @@ Handler cmd::Remove(const Options & options)
 {
 	return[path = options.path](Node * node, std::ostream & out)
 	{
-		//rmdir(path.c_str());
+		_rmdir(path.c_str()); //vymaze adresar
 		remove(path.c_str()); //vymaze file
-		//RemoveDirectory(path.c_str());
+		
 		return true;
 	};
 }
